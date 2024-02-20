@@ -70,6 +70,22 @@ void addAtStart(LinkedList* list, int data) {
     list->size++;
 }
 
+void addAtPos(LinkedList* list, int data, int pos) {
+    if (pos > list->size-1) {
+        addAtEnd(list, data);
+    } else if (pos <= 0) {
+        addAtStart(list, data);
+    } else {
+        Node* curr = list->head;
+        for (int i; i < pos-1; i++) {
+            curr = curr->next;
+        }
+        Node* newNode = createNode(data);
+        newNode->next = curr->next;
+        curr->next = newNode;
+    }
+}
+
 void printList(LinkedList* list) {
     // This requires a current Node pointer as if you
     // do the regular cycling through the llist from
@@ -80,20 +96,23 @@ void printList(LinkedList* list) {
         printf("%d,", curr->data);
         curr = curr->next;
     }
+    printf("\n");
 }
 
 int main() {
     LinkedList list;
     initLinkedList(&list);
 
-    addAtEnd(&list, 2);
     addAtEnd(&list, 3);
-    addAtEnd(&list, 4);
-    addAtEnd(&list, 5);
+    printList(&list);
     
     addAtStart(&list, 1);
-    addAtStart(&list, 0);
-
     printList(&list);
+
+    addAtPos(&list, 2, 1);
+    addAtPos(&list, 0, 0);
+    addAtPos(&list, 4, 5);
+    printList(&list);
+
     return EXIT_SUCCESS;
 }
