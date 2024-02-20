@@ -1,3 +1,11 @@
+/*
+ * Singly Linked List
+ * Goals:
+ *  - [x] Insertion: Beginning, End, Positional
+ *  - [ ] Deletion: Beginning, End, Positional
+ *  - [x] Search: Node by value
+ *  - [x] Traversal: print them out ;)
+ */
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -38,6 +46,7 @@ Node* createNode(int data) {
     return tmp;
 }
 
+// O(1)
 void addAtEnd(LinkedList* list, int data) {
     Node* newNode = createNode(data);
     // The list is empty, so both the head and the tail 
@@ -57,6 +66,7 @@ void addAtEnd(LinkedList* list, int data) {
 
 // This works similarly to addAtEnd() however the case
 // when a list already exists needs to be flipped
+// O(1)
 void addAtStart(LinkedList* list, int data) {
     Node* newNode = createNode(data);
 
@@ -70,12 +80,15 @@ void addAtStart(LinkedList* list, int data) {
     list->size++;
 }
 
+// Linear traversal to location so O(n)
 void addAtPos(LinkedList* list, int data, int pos) {
     if (pos > list->size-1) {
         addAtEnd(list, data);
     } else if (pos <= 0) {
         addAtStart(list, data);
     } else {
+        // Travel to one node before the position of
+        // insertion
         Node* curr = list->head;
         for (int i; i < pos-1; i++) {
             curr = curr->next;
@@ -84,6 +97,18 @@ void addAtPos(LinkedList* list, int data, int pos) {
         newNode->next = curr->next;
         curr->next = newNode;
     }
+}
+
+// Linear search, O(n)
+Node* searchValue(LinkedList* list, int value) {
+    Node* curr = list->head;
+    while (curr != NULL) {
+        if (curr->data == value) {
+            return curr;
+        }
+        curr = curr->next;
+    }
+    return NULL;
 }
 
 void printList(LinkedList* list) {
@@ -97,6 +122,14 @@ void printList(LinkedList* list) {
         curr = curr->next;
     }
     printf("\n");
+}
+
+void printNode(Node* node) {
+    if (node) {
+        printf("Value: %d\n", node->data);
+        return;
+    }
+    printf("Node does not exist\n");
 }
 
 int main() {
@@ -113,6 +146,11 @@ int main() {
     addAtPos(&list, 0, 0);
     addAtPos(&list, 4, 5);
     printList(&list);
+
+    Node* value = searchValue(&list, 1);
+    Node* value2 = searchValue(&list, 10);
+    printNode(value);
+    printNode(value2);
 
     return EXIT_SUCCESS;
 }
