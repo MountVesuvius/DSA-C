@@ -6,6 +6,7 @@
  *  - [x] Search: Node by value
  *  - [x] Traversal: print them out ;)
  */
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -14,6 +15,14 @@ typedef struct node {
     int data;
     struct node *next;
 } Node;
+
+void printNode(Node* node) {
+    if (node) {
+        printf("Value: %d\n", node->data);
+        return;
+    }
+    printf("Node does not exist\n");
+}
 
 /* This works as "container" which has the head and 
  * tail pointers for the the list, as well as the
@@ -99,6 +108,45 @@ void addAtPos(LinkedList* list, int data, int pos) {
     }
 }
 
+void deleteAtStart(LinkedList* list) {
+    // Don't delete non-existing nodes
+    if (list->head == NULL) {
+        return;
+    } 
+    // Free from memory
+    Node* tmp = list->head->next;
+    free(list->head);
+    list->head = tmp;
+    // Clear out the tail pointer as well
+    if (list->size == 1) {
+        list->tail = NULL;
+    }
+    list->size--;
+}
+
+// Without double linkage the only way is to traverse
+// linearly then remove the tail when the 2nd last node
+// is reached
+void deleteAtEnd(LinkedList* list) {
+    if (list->tail == NULL) {
+        return;
+    } else if (list->size == 1) {
+        free(list->tail);
+        list->head = NULL;
+        list->tail = NULL;
+        list->size--;
+        return;
+    }
+    Node* curr = list->head;
+    for (int i=0; i < list->size-1; ++i) {
+        curr = curr->next;
+    }
+    free(curr->next);
+    curr->next = NULL;
+    list->tail = curr;
+    list->size--;
+}
+
 // Linear search, O(n)
 Node* searchValue(LinkedList* list, int value) {
     Node* curr = list->head;
@@ -124,14 +172,6 @@ void printList(LinkedList* list) {
     printf("\n");
 }
 
-void printNode(Node* node) {
-    if (node) {
-        printf("Value: %d\n", node->data);
-        return;
-    }
-    printf("Node does not exist\n");
-}
-
 int main() {
     LinkedList list;
     initLinkedList(&list);
@@ -151,6 +191,12 @@ int main() {
     Node* value2 = searchValue(&list, 10);
     printNode(value);
     printNode(value2);
+
+    deleteAtStart(&list);
+    printList(&list);
+
+    deleteAtEnd(&list);
+    printList(&list);
 
     return EXIT_SUCCESS;
 }
