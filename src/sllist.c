@@ -9,12 +9,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
-// The node struct 
-typedef struct node {
-    int data;
-    struct node *next;
-} Node;
+#include "../include/sllist.h"
 
 void printNode(Node* node) {
     if (node) {
@@ -23,19 +18,6 @@ void printNode(Node* node) {
     }
     printf("Node does not exist\n");
 }
-
-/* This works as "container" which has the head and 
- * tail pointers for the the list, as well as the
- * size.
- * A nice way to think of these pointers is as labels
- * over nodes. So node1 may be the head node, however
- * the head pointer is the label node1.
- */
-typedef struct linkedlist {
-    Node* head;
-    Node* tail;
-    int size;
-} LinkedList;
 
 // Init the llist to nothing as it's empty
 void initLinkedList(LinkedList* list) {
