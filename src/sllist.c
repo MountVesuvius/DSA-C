@@ -2,7 +2,7 @@
  * Singly Linked List
  * Goals:
  *  - [x] Insertion: Beginning, End, Positional
- *  - [ ] Deletion: Beginning, End, Positional
+ *  - [x] Deletion: Beginning, End, Positional, Entire LList
  *  - [x] Search: Node by value
  *  - [x] Traversal: print them out ;)
  */
@@ -108,6 +108,8 @@ void addAtPos(LinkedList* list, int data, int pos) {
     }
 }
 
+// Frees the head, and replaces the node head is
+// pointing to.
 void deleteAtStart(LinkedList* list) {
     // Don't delete non-existing nodes
     if (list->head == NULL) {
@@ -147,6 +149,47 @@ void deleteAtEnd(LinkedList* list) {
     list->size--;
 }
 
+// This requires a linear traversal, therefore O(n)
+void deleteAtPos(LinkedList* list, int pos) {
+    if (list->size == 0) {
+        return;
+    } else if (list->size == 1 || pos <= 0) {
+        deleteAtStart(list);
+        return;
+    } else if (pos >= list->size) {
+        deleteAtEnd(list);
+        return;
+    } 
+
+    Node* curr = list->head;
+    for (int i = 0; i < pos - 1; ++i) {
+        curr = curr->next;
+    }
+    Node* tmp = curr->next;
+    curr->next = tmp->next;
+    // reupdates the tail incase node deleted is the
+    // 2nd last node
+    if (tmp->next == NULL) {
+        list->tail = curr;
+    }
+    free(tmp);
+    list->size--;
+}
+
+// Frees all nodes from memory and resets the llist.
+// Allows for list to be reused if that usecase is required
+void deleteList(LinkedList* list) {
+    Node* tmp = list->head;
+    while (list->head != NULL) {
+        list->head = list->head->next;
+        free(tmp);
+        tmp = list->head;
+    }
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+}
+
 // Linear search, O(n)
 Node* searchValue(LinkedList* list, int value) {
     Node* curr = list->head;
@@ -172,6 +215,7 @@ void printList(LinkedList* list) {
     printf("\n");
 }
 
+// Testing llist operations
 int main() {
     LinkedList list;
     initLinkedList(&list);
@@ -187,16 +231,29 @@ int main() {
     addAtPos(&list, 4, 5);
     printList(&list);
 
-    Node* value = searchValue(&list, 1);
-    Node* value2 = searchValue(&list, 10);
-    printNode(value);
-    printNode(value2);
-
-    deleteAtStart(&list);
+    // Node* value = searchValue(&list, 1);
+    // Node* value2 = searchValue(&list, 10);
+    // printNode(value);
+    // printNode(value2);
+    //
+    // deleteAtStart(&list);
+    // printList(&list);
+    //
+    // deleteAtEnd(&list);
+    // printList(&list);
+    //
+    deleteAtPos(&list, 1);
     printList(&list);
 
-    deleteAtEnd(&list);
+    // deleteAtPos(&list, 0);
+    // printList(&list);
+    //
+    deleteAtPos(&list, 20);
     printList(&list);
+
+    deleteList(&list);
+    printList(&list);
+
 
     return EXIT_SUCCESS;
 }
