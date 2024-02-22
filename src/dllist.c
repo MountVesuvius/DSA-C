@@ -89,6 +89,31 @@ void addAtStart(LinkedList* list, int data) {
     list->size++;
 }
 
+void addAtPos(LinkedList* list, int pos, int data) {
+    if (pos >= list->size) {
+        addAtEnd(list, data);
+        return;
+    } else if (pos <= 0) {
+        addAtStart(list, data);
+        return;
+    } else {
+        Node* tmp = list->head;
+        for (int i=0; i<pos-1; i++) {
+            tmp = tmp->next;
+        }
+        Node* newNode = createNode(data);
+        newNode->next = tmp->next;
+        tmp->next->prev = newNode;
+        // in case the position places it at the end of the llist
+        if (tmp->next != NULL) { 
+            tmp->next->prev = newNode;
+        }
+        tmp->next = newNode;
+        newNode->prev = tmp;
+    }
+    list->size++;
+}
+
 
 int main() {
     LinkedList list;
@@ -99,6 +124,8 @@ int main() {
     addAtEnd(&list, 6);
 
     addAtStart(&list, 0);
+
+    addAtPos(&list, 1, 1);
 
     printFromStart(&list);
     printFromEnd(&list);
