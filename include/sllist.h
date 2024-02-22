@@ -22,10 +22,20 @@ typedef struct linkedlist {
 
 
 void initLinkedList(LinkedList* list);
+void printNode(Node* node);
+void printList(LinkedList* list);
 
 Node* createNode(int data);
+void addAtEnd(LinkedList* list, int data);
+void addAtStart(LinkedList* list, int data);
+void addAtPos(LinkedList* list, int data, int pos);
 
-void printNode(Node* node);
+void deleteAtStart(LinkedList* list);
+void deleteAtEnd(LinkedList* list);
+void deleteAtPos(LinkedList* list, int pos);
+void deleteList(LinkedList* list);
 
+
+Node* searchValue(LinkedList* list, int value);
 
 #endif
