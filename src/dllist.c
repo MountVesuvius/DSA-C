@@ -2,7 +2,7 @@
  * Doubly Linked List
  * Goals:
  *  - [x] Insertion: Beginning, End, Positional
- *  - [ ] Deletion: Beginning, End, Positional, Entire LList
+ *  - [x] Deletion: Beginning, End, Positional, Entire LList
  *  - [x] Search: Node by value
  *  - [x] Traversal: print them out ;)
  */
@@ -170,6 +170,21 @@ void deleteAtPos(LinkedList* list, int pos) {
     list->size--;
 }
 
+void deleteList(LinkedList* list) {
+    if (list->size == 0) {
+        return;
+    }
+    Node* tmp = list->head;
+    while (list->head != NULL) {
+        list->head = list->head->next;
+        free(tmp);
+        tmp = list->head;
+    }
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+}
+
 Node* searchValue(LinkedList* list, int value) {
     Node* tmp = list->head;
     while (tmp != NULL) {
@@ -201,6 +216,7 @@ int main() {
 
     // deleteAtEnd(&list);
     // deleteAtStart(&list);
+    deleteList(&list);
 
     printFromStart(&list);
     printFromEnd(&list);
