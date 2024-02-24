@@ -104,7 +104,6 @@ void addAtPos(LinkedList* list, int pos, int data) {
         Node* newNode = createNode(data);
         newNode->next = tmp->next;
         tmp->next->prev = newNode;
-        // in case the position places it at the end of the llist
         if (tmp->next != NULL) { 
             tmp->next->prev = newNode;
         }
@@ -118,12 +117,56 @@ void deleteAtEnd(LinkedList* list) {
     if (list->size == 0) {
         return;
     } else if (list->size == 1) {
+        free(list->tail);
         list->head = NULL;
+        list->tail = NULL;
+    } else {
+        Node* prev = list->tail->prev;
+        if (prev != NULL) {
+            prev->next = NULL;
+        }
+        free(list->tail);
+        list->tail = prev;
     }
-    Node* prev = list->tail->prev;
-    prev->next = NULL;
-    free(list->tail);
-    list->tail = prev;
+    list->size--;   
+}
+
+void deleteAtStart(LinkedList* list) {
+    if (list->size == 0) {
+        return;
+    } else if (list->size == 1) {
+        free(list->head);
+        list->tail = NULL;
+        list->head = NULL;
+    } else {
+        Node* next = list->head->next;
+        if (next != NULL) {
+            next->prev = NULL;
+        }
+        free(list->head);
+        list->head = next;
+    }
+    list->size--;
+}
+
+void deleteAtPos(LinkedList* list, int pos) {
+    if (list->size == 0) {
+        return;
+    } else if (list->size == 1 || pos <= 0) {
+        deleteAtStart(list);
+        return;
+    } else if (pos >= list->size-1) {
+        deleteAtEnd(list);
+        return;
+    }
+    Node* tmp = list->head;
+    for (int i = 0; i < pos; i++) {
+        tmp = tmp->next;
+    }
+    // Overchains the selected node, then frees it from memory
+    tmp->prev->next = tmp->next;
+    tmp->next->prev = tmp->prev;
+    free(tmp);
     list->size--;
 }
 
@@ -146,14 +189,18 @@ int main() {
     initLinkedList(&list);
 
     addAtEnd(&list, 2);
+    addAtEnd(&list, 3);
     addAtEnd(&list, 4);
-    addAtEnd(&list, 6);
 
     addAtStart(&list, 0);
 
     addAtPos(&list, 1, 1);
 
-    deleteAtEnd(&list);
+    deleteAtPos(&list, 0);
+
+
+    // deleteAtEnd(&list);
+    // deleteAtStart(&list);
 
     printFromStart(&list);
     printFromEnd(&list);
