@@ -1,10 +1,10 @@
 /*
  * Doubly Linked List
  * Goals:
- *  - [ ] Insertion: Beginning, End, Positional
+ *  - [x] Insertion: Beginning, End, Positional
  *  - [ ] Deletion: Beginning, End, Positional, Entire LList
- *  - [ ] Search: Node by value
- *  - [ ] Traversal: print them out ;)
+ *  - [x] Search: Node by value
+ *  - [x] Traversal: print them out ;)
  */
 
 #include <stdio.h>
@@ -114,6 +114,32 @@ void addAtPos(LinkedList* list, int pos, int data) {
     list->size++;
 }
 
+void deleteAtEnd(LinkedList* list) {
+    if (list->size == 0) {
+        return;
+    } else if (list->size == 1) {
+        list->head = NULL;
+    }
+    Node* prev = list->tail->prev;
+    prev->next = NULL;
+    free(list->tail);
+    list->tail = prev;
+    list->size--;
+}
+
+Node* searchValue(LinkedList* list, int value) {
+    Node* tmp = list->head;
+    while (tmp != NULL) {
+        if (tmp->data == value) {
+            printNode(tmp);
+            return tmp;
+        }
+        tmp = tmp->next;
+    }
+    printf("Value not found");
+    return NULL;
+}
+
 
 int main() {
     LinkedList list;
@@ -127,8 +153,12 @@ int main() {
 
     addAtPos(&list, 1, 1);
 
+    deleteAtEnd(&list);
+
     printFromStart(&list);
     printFromEnd(&list);
+
+    // Node* search = searchValue(&list, 6);
 
     return EXIT_SUCCESS;
 }
