@@ -48,10 +48,65 @@ void enqueue(Queue* queue, int data) {
     queue->size++;
 }
 
+int dequeue(Queue* queue) {
+    if (queue->size == 0) {
+        return -1;
+    }
+    Node* tmp = queue->end->prev;
+    int data = queue->end->data;
+    free(queue->end);
+    queue->end = tmp;
+    queue->end->next = NULL;
+    if (queue->size == 1) {
+        queue->start = NULL;
+    }
+    queue->size--;
+    return data;
+}
+
+void printQueue(Queue* queue) {
+    Node* curr = queue->start;
+    while (curr->next) {
+        printf("%d -> ", curr->data);
+        curr = curr->next;
+    }
+    printf("%d", curr->data);
+    printf("\n");
+}
+
+void rev_printQueue(Queue* queue) {
+    Node* curr = queue->end;
+    while (curr->prev) {
+        printf("%d -> ", curr->data);
+        curr = curr->prev;
+    }
+    printf("%d", curr->data);
+    printf("\n");
+}
+
 int main() {
 
     Queue queue;
     initQueue(&queue);
+
+    for (int i = 0; i < 10; i++) {
+        enqueue(&queue, i+1);
+    }
+
+    printQueue(&queue);
+    rev_printQueue(&queue);
+
+    for (int i = 0; i < 5; i++) {
+        printf("Removed: %d\n", dequeue(&queue));
+    }
+
+    printQueue(&queue);
+
+    // dequeue(&queue);
+    // dequeue(&queue);
+    // dequeue(&queue);
+    // printQueue(&queue);
+
     
     return EXIT_SUCCESS;
 }
