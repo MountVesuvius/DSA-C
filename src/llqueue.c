@@ -1,9 +1,9 @@
 /* Queues - LList Edition
- * - [ ] Enqueue: Add an item to the end.
- * - [ ] Dequeue: Remove the item from the beginning.
- * - [ ] Front: Get the first item.
- * - [ ] Rear: Get the last item.
- * - [ ] isEmpty: Check if the queue is empty.
+ * - [x] Enqueue: Add an item to the end.
+ * - [x] Dequeue: Remove the item from the beginning.
+ * - [x] Front: Get the first item.
+ * - [x] Rear: Get the last item.
+ * - [x] isEmpty: Check if the queue is empty.
  */
 
 #include <stdlib.h>
@@ -84,14 +84,32 @@ void rev_printQueue(Queue* queue) {
     printf("\n");
 }
 
+int front(Queue* queue) {
+    return queue->start->data;
+}
+
+int end(Queue* queue) {
+    return queue->end->data;
+}
+
+int isEmpty(Queue* queue) {
+    return queue->size < 1;
+}
+
 int main() {
 
     Queue queue;
     initQueue(&queue);
 
+    printf("%d\n", isEmpty(&queue));
+
     for (int i = 0; i < 10; i++) {
         enqueue(&queue, i+1);
     }
+
+    printf("%d\n", isEmpty(&queue));
+    printf("Front: %d\n", front(&queue));
+    printf("End: %d\n", end(&queue));
 
     printQueue(&queue);
     rev_printQueue(&queue);
@@ -102,11 +120,5 @@ int main() {
 
     printQueue(&queue);
 
-    // dequeue(&queue);
-    // dequeue(&queue);
-    // dequeue(&queue);
-    // printQueue(&queue);
-
-    
     return EXIT_SUCCESS;
 }
