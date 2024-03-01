@@ -54,7 +54,30 @@ Node* findMin(Node* root) {
     return curr;
 }
 
+Node* deleteNode(Node* root, int data) {
+    if (!root) return root;
+    if (data < root->data) {
+        root->left = deleteNode(root->left, data);
+    } else if ( data > root->data) {
+        root->right = deleteNode(root->right, data);
+    } else {
+        // left, right, mid rejoin
+        if (!root->left) {
+            Node* tmp = root->right;
+            free(root);
+            return tmp;
+        } else if (root->right == NULL) {
+            Node* tmp = root->left;
+            free(root);
+            return tmp;
+        }
+        Node* tmp = findMin(root->right);
+        root->data = tmp->data;
+        root->right = deleteNode(root->right, tmp->data);
+    }
 
+    return root;
+}
 
 void inOrder(Node* root) {
     if (!root) return;
