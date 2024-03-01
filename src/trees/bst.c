@@ -46,12 +46,23 @@ void insertNode(Node** root, int data) {
     }
 } 
 
+Node* findMin(Node* root) {
+    Node* curr = root;
+    while (!curr && !curr->left) {
+        curr = curr->left;
+    }
+    return curr;
+}
+
+
+
 void inOrder(Node* root) {
     if (!root) return;
     inOrder(root->left);
     printf("%d, ", root->data);
     inOrder(root->right);
 }
+
 
 int main() {
     Node *root = NULL;
