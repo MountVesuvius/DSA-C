@@ -48,7 +48,7 @@ void insertNode(Node** root, int data) {
 
 Node* findMin(Node* root) {
     Node* curr = root;
-    while (!curr && !curr->left) {
+    while (curr->left) {
         curr = curr->left;
     }
     return curr;
@@ -90,15 +90,18 @@ void inOrder(Node* root) {
 int main() {
     Node *root = NULL;
     
-     insertNode(&root, 5);
+    insertNode(&root, 5);
     insertNode(&root, 3);
     insertNode(&root, 7);
     insertNode(&root, 2);
     insertNode(&root, 4);
     insertNode(&root, 6);
     insertNode(&root, 8);
+    insertNode(&root, 1);
 
     inOrder(root);
+
+    printf("\n%d\n", findMin(root)->data);
 
 
     return EXIT_SUCCESS;
