@@ -56,28 +56,46 @@ Node* findMin(Node* root) {
 
 Node* deleteNode(Node* root, int data) {
     if (!root) return root;
+
+    // trace to selected node
     if (data < root->data) {
         root->left = deleteNode(root->left, data);
-    } else if ( data > root->data) {
+        return root;
+    } else if (data > root->data) {
         root->right = deleteNode(root->right, data);
-    } else {
-        // left, right, mid rejoin
-        if (!root->left) {
-            Node* tmp = root->right;
-            free(root);
-            return tmp;
-        } else if (root->right == NULL) {
-            Node* tmp = root->left;
-            free(root);
-            return tmp;
-        }
-        Node* tmp = findMin(root->right);
-        root->data = tmp->data;
-        root->right = deleteNode(root->right, tmp->data);
+        return root;
     }
 
-    return root;
+    // free single child
+    if (root->left == NULL) {
+        Node* tmp = root->right;
+        free(root);
+        return tmp;
+    } else if (root->right == NULL) {
+        Node* tmp = root->left;
+        free(root);
+        return tmp;
+    } else {
+        // in order successor
+        Node* parent = root;
+        Node* child = root->right;
+        while (child->left != NULL) {
+            parent = child;
+            child = child->left;
+        }
+
+        if (parent != root) {
+            parent->left = child->right;
+        } else {
+            parent->right = child->right;
+        }
+
+        root->data = child->data;
+        free(child);
+        return root;
+    }
 }
+
 
 void inOrder(Node* root) {
     if (!root) return;
@@ -100,8 +118,14 @@ int main() {
     insertNode(&root, 1);
 
     inOrder(root);
+    printf("\n");
 
-    printf("\n%d\n", findMin(root)->data);
+    // printf("\n%d\n", findMin(root)->data);
+    deleteNode(root, 1);
+
+    deleteNode(root, 7);
+    inOrder(root);
+    printf("\n");
 
 
     return EXIT_SUCCESS;
