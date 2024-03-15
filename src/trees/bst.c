@@ -7,7 +7,7 @@ typedef struct node {
     struct node* right;
 } Node;
 
-Node* createNode(int data) {
+Node* create_node(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
     newNode->left = NULL;
@@ -15,31 +15,31 @@ Node* createNode(int data) {
     return newNode;
 }
 
-void printInOrder(Node* root) {
+void print_inorder(Node* root) {
     if (!root) return;
 
-    printInOrder(root->left);
+    print_inorder(root->left);
     printf("%d ", root->data);
-    printInOrder(root->right);
+    print_inorder(root->right);
 }
 
 void insert(Node* root, int data) {
     if (data < root->data) {
         if (!root->left) {
-            root->left = createNode(data);
+            root->left = create_node(data);
         } else {
             insert(root->left, data);
         }
     } else {
         if (!root->right) {
-            root->right = createNode(data);
+            root->right = create_node(data);
         } else {
             insert(root->right, data);
         }
     }
 }
 
-Node* findMin(Node* root) {
+Node* find_min(Node* root) {
     Node* curr = root;
     while (curr->left) {
         curr = curr->left;
@@ -47,7 +47,7 @@ Node* findMin(Node* root) {
     return curr;
 }
 
-Node* findMax(Node* root) {
+Node* find_max(Node* root) {
     Node* curr = root;
     while (curr->right) {
         curr = curr->right;
@@ -61,29 +61,37 @@ Node* _find(Node* root, int data) {
     return _find(root->right, data);
 }
 
-int findValue(Node* root, int data) {
+int find_value(Node* root, int data) {
     Node* found = _find(root, data);
-    if (found) printf("%d\n", found->data);
-    else printf("not found");
+    if (found) return root->data;
+    else return -1;
 
     return found->data;
 }
 
+void delete_tree(Node* root) {
+    if (!root) return;
+    delete_tree(root->left);
+    delete_tree(root->right);
+    free(root);
+}
+
 int main() {
 
-    Node* root = createNode(5);
+    Node* root = create_node(5);
     insert(root, 1);
     insert(root, 4);
     insert(root, 2);
     insert(root, 3);
 
-    printInOrder(root);
+    print_inorder(root);
     printf("\n");
 
-    // printf("%d\n", findMin(root)->data);
+    printf("%d\n", find_value(root, 4));
+    printf("%d\n", find_value(root, 12));
 
-    // printf("%d\n", findValue(root, 3)->data);
-
+    delete_tree(root);
+    printf("tree deleted");
 
     return EXIT_SUCCESS;
 }
