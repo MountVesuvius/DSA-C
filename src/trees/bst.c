@@ -15,12 +15,40 @@ Node* create_node(int data) {
     return newNode;
 }
 
+void print_preorder(Node* root) {
+    if (!root) return;
+
+    printf("%d ", root->data);
+    print_preorder(root->left);
+    print_preorder(root->right);
+}
+
 void print_inorder(Node* root) {
     if (!root) return;
 
     print_inorder(root->left);
     printf("%d ", root->data);
     print_inorder(root->right);
+}
+
+void print_postorder(Node* root) {
+    if (!root) return;
+
+    print_postorder(root->left);
+    print_postorder(root->right);
+    printf("%d ", root->data);
+}
+
+int tree_height(Node* root) {
+    if (!root) return 0;
+    int left_height = tree_height(root->left);
+    int right_height = tree_height(root->right);
+
+    if (left_height > right_height) {
+        return left_height + 1;
+    } else {
+        return right_height + 1;
+    }
 }
 
 void insert(Node* root, int data) {
@@ -78,17 +106,19 @@ void delete_tree(Node* root) {
 
 int main() {
 
-    Node* root = create_node(5);
+    Node* root = create_node(3);
+    insert(root, 5);
+    insert(root, 2);
     insert(root, 1);
     insert(root, 4);
-    insert(root, 2);
-    insert(root, 3);
 
     print_inorder(root);
     printf("\n");
 
     printf("%d\n", find_value(root, 4));
     printf("%d\n", find_value(root, 12));
+
+    printf("%d\n", tree_height(root));
 
     delete_tree(root);
     printf("tree deleted");
